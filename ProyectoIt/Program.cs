@@ -1,3 +1,5 @@
+using Infrastructure;
+
 namespace ProyectoIt
 {
     public class Program
@@ -8,7 +10,8 @@ namespace ProyectoIt
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddInfrastructure(connectionString);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

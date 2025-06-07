@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Settings
 {
-
     // TODO : Agregar la configuracion el servicio de mails
     internal class Class1
     {
