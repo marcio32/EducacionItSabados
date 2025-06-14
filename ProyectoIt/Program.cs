@@ -12,6 +12,10 @@ namespace ProyectoIt
             builder.Services.AddRazorPages();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddInfrastructure(connectionString);
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "RequestVerificationToken";
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

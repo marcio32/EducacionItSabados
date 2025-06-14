@@ -1,0 +1,28 @@
+﻿@page
+@model WebUI.Pages.Users.UserPartialModel
+@{
+    Layout = null;
+}
+
+<form id="serviceForm" method="post">
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" value=""/>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" id="email" name="email" class="form-control" value="" />
+    </div>
+
+    <div class="mb-3">
+        <label for="rol" class="form-label">Rol</label>
+        <input type="text" id="rol" name="rol" class="form-control" value="" />
+    </div>
+
+    <div class="mb-3">
+        <label for="estado" class="form-label">Estado</label>
+        <input type="checkbox" id="estado" name="estado" class="form-check-input" value="" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</form>

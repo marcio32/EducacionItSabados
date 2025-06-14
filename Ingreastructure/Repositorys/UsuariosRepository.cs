@@ -10,7 +10,7 @@ namespace Infrastructure.Repositorys
 
         public UsuariosRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Usuarios>> GetAllAsync() => await _dbContext.Usuarios.ToListAsync();
+        public async Task<IEnumerable<Usuarios>> GetAllAsync() => await _dbContext.Usuarios.Include(x=> x.Rol).ToListAsync();
         public async Task<Usuarios?> GetByIdAsync(int id) => await _dbContext.Usuarios.FindAsync(id);
         public async Task<bool> UpdateAsync(Usuarios usuario)
         {

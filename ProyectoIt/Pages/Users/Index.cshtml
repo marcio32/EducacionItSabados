@@ -1,0 +1,59 @@
+﻿@page
+@model WebUI.Pages.Users.IndexModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    var token = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<h1>Usuarios</h1>
+<button class="btn btn-primary mb-3 addUserBtn">Agregar</button>
+<table id="userTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Nombre</td>
+                <td>@user.Email</td>
+                <td>@user.Rol.Nombre</td>
+                <td>@(@user.Estado ? "Activo" : "Inactivo")</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary editUserBtn">Editar</button>
+                    <button type="button" class="btn btn-sm btn-danger deleteUserBtn" data-user-id="@user.Id">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="UserModalLabel">Editar Usuarios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="UserContent">
+                <!--Vamos a Injectar nuestra Partial-->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var deleteUserUrl = '@Url.Page("/Users/UserPartial", "User")';
+        var antiForgeryToken = '@token';
+    </script>
+    <script src="~/js/Users/Users.js"></script>
+}
