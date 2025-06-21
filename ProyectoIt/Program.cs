@@ -17,7 +17,7 @@ namespace ProyectoIt
                 options.HeaderName = "RequestVerificationToken";
             });
             var app = builder.Build();
-
+             
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {

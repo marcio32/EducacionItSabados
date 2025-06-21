@@ -1,5 +1,7 @@
-﻿using Infrastructure.Persistence;
+﻿using Infrastructure.Application;
+using Infrastructure.Persistence;
 using Infrastructure.Repositorys;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +13,9 @@ namespace Infrastructure
         {
         
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-            services.AddTransient<IUsuariosRepository, UsuariosRepository>();
+            services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IRolesRepository, RolesRepository>();
             return services;
         }
     }

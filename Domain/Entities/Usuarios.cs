@@ -16,7 +16,9 @@ namespace Domain.Entities
         [Required(ErrorMessage = "La contraseña es obligatoria")]
         [MaxLength(200)]
         public string HashPassword { get; set; } = string.Empty;
-        public Roles Rol { get; set; } = new Roles();
+
+        public int RolId { get; set; }
+        public Roles Rol { get; set; } 
         public bool Estado { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }

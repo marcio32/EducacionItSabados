@@ -28,7 +28,7 @@
                 <td>@user.Rol.Nombre</td>
                 <td>@(@user.Estado ? "Activo" : "Inactivo")</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-primary editUserBtn">Editar</button>
+                    <button type="button" class="btn btn-sm btn-primary editUserBtn" data-user-id="@user.Id">Editar</button>
                     <button type="button" class="btn btn-sm btn-danger deleteUserBtn" data-user-id="@user.Id">Eliminar</button>
                 </td>
             </tr>

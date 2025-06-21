@@ -1,28 +1,40 @@
 ﻿@page
 @model WebUI.Pages.Users.UserPartialModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
     Layout = null;
 }
 
-<form id="serviceForm" method="post">
+<form id="userForm" method="post">
     <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" id="nombre" name="nombre" class="form-control" value=""/>
+        <label for="Name" class="form-label">Nombre</label>
+        <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" />
     </div>
 
     <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="text" id="email" name="email" class="form-control" value="" />
+        <label for="Email" class="form-label">Email</label>
+        <input type="text" id="Email" name="Email" class="form-control" value="@Model.Email" />
     </div>
 
     <div class="mb-3">
-        <label for="rol" class="form-label">Rol</label>
-        <input type="text" id="rol" name="rol" class="form-control" value="" />
+        <label for="Password" class="form-label">Password</label>
+        <input type="password" id="Password" name="Password" class="form-control" value="@Model.Password" />
     </div>
 
     <div class="mb-3">
-        <label for="estado" class="form-label">Estado</label>
-        <input type="checkbox" id="estado" name="estado" class="form-check-input" value="" />
+        <label for="Rol" class="form-label">Rol</label>
+        <select id="Rol" name="Rol" class="form-select">
+            @foreach (var rol in Model.Roles)
+            {
+                <option value="@rol.Id">@rol.Nombre</option>
+            }
+        </select>
     </div>
+
+    <div class="mb-3">
+        <label for="Estado" class="form-label">Estado</label>
+        <input type="checkbox" id="Estado" name="Estado" class="form-check-input" @(Model.Estado ? "checked" : null)/>
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id"/>
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </form>
