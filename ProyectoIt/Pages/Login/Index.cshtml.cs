@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebUI.Pages.Roles
+namespace WebUI.Pages.Login
 {
-    public class UserPartialModel : PageModel
+    public class IndexModel : PageModel
     {
         public void OnGet()
         {

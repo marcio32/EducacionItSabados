@@ -1,26 +1,26 @@
 ﻿$(function () {
-    $('#userTable').DataTable({
+    $('#rolTable').DataTable({
         language: {
             url: '//cdn.datatables.net/plug-ins/2.3.2/i18n/es-ES.json',
         },
     });
-});
+})
 
-$('.addUserBtn').click(function () {
+$('.addRolBtn').click(function () {
     $.ajax({
-        url: '/Users/UserPartial',
+        url: '/Roles/RolPartial',
         type: 'GET',
         success: function (data) {
-            $('#UserContent').html(data);
-            var modal = new bootstrap.Modal($('#editUserModal'));
+            $('#RolContent').html(data);
+            var modal = new bootstrap.Modal($('#editRolModal'));
             modal.show();
 
-            $('#userForm').submit(function (e) {
+            $('#rolForm').submit(function (e) {
                 e.preventDefault();
                 debugger
                 var formData = new FormData(this);
                 $.ajax({
-                    url: 'Users/UserPartial',
+                    url: 'Roles/RolPartial',
                     type: 'POST',
                     headers: {
                         "RequestVerificationToken": antiForgeryToken
@@ -45,7 +45,7 @@ $('.addUserBtn').click(function () {
                         modal.hide();
                         Swal.fire({
                             title: "Error!",
-                            text: "No se pudo eliminar el usuario.",
+                            text: "No se pudo eliminar el rol.",
                             icon: "error"
                         });
                     }
@@ -56,23 +56,23 @@ $('.addUserBtn').click(function () {
     });
 });
 
-$('.editUserBtn').click(function () {
-    var userId = $(this).data("user-id");
+$('.editRolBtn').click(function () {
+    var rolId = $(this).data("rol-id");
     $.ajax({
-        url: '/Users/UserPartial?id=' + userId,
+        url: '/Roles/RolPartial?id=' + rolId,
         type: 'GET',
         success: function (data) {
 
-            $('#UserContent').html(data);
-            var modal = new bootstrap.Modal($('#editUserModal'));
+            $('#RolContent').html(data);
+            var modal = new bootstrap.Modal($('#editRolModal'));
             modal.show();
 
-            $('#userForm').submit(function (e) {
+            $('#rolForm').submit(function (e) {
                 e.preventDefault();
 
                 var formData = new FormData(this);
                 $.ajax({
-                    url: 'Users/UserPartial',
+                    url: 'Roles/RolPartial',
                     type: 'PUT',
                     headers: {
                         "RequestVerificationToken": antiForgeryToken
@@ -97,7 +97,7 @@ $('.editUserBtn').click(function () {
                         modal.hide();
                         Swal.fire({
                             title: "Error!",
-                            text: "No se pudo eliminar el usuario.",
+                            text: "No se pudo eliminar el rol.",
                             icon: "error"
                         });
                     }
@@ -107,10 +107,10 @@ $('.editUserBtn').click(function () {
     });
 });
 
-$('.deleteUserBtn').click(function () {
+$('.deleteRolBtn').click(function () {
     Swal.fire({
         title: "Estas Seguro?",
-        text: "Vas a eliminar al usuario",
+        text: "Vas a eliminar al rol",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -120,15 +120,15 @@ $('.deleteUserBtn').click(function () {
     }).then((result) => {
         debugger
         if (result.isConfirmed) {
-            var userId = $(this).data("user-id");
+            var rolId = $(this).data("rol-id");
             $.ajax({
-                url: deleteUserUrl,
+                url: deleteRolUrl,
                 type: 'DELETE',
                 headers: {
                     "RequestVerificationToken": antiForgeryToken
                 },
                 contentType: "application/json",
-                data: JSON.stringify({ id: userId }),
+                data: JSON.stringify({ id: rolId }),
                 success: function (data) {
                     if (data.success) {
                         location.reload();
@@ -145,7 +145,7 @@ $('.deleteUserBtn').click(function () {
                     modal.hide();
                     Swal.fire({
                         title: "Error!",
-                        text: "No se pudo eliminar el usuario.",
+                        text: "No se pudo eliminar el rol.",
                         icon: "error"
                     });
                 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebUI.Pages.Users.Request;
 using Domain.Entities;
 using Infrastructure.Application;
+using WebUI.Pages.Users.DTOs;
 
 namespace WebUI.Pages.Users
 {
@@ -23,17 +24,7 @@ namespace WebUI.Pages.Users
         public List<Domain.Entities.Roles> Roles { get; set; } = new List<Domain.Entities.Roles>();
 
         [BindProperty]
-        public int Id { get; set; }
-        [BindProperty]
-        public string Name { get; set; }
-        [BindProperty]
-        public string Email { get; set; }
-        [BindProperty]
-        public string Password { get; set; }
-        [BindProperty]
-        public int Rol { get; set; }
-        [BindProperty]
-        public bool Estado { get; set; }
+        public UserDto UserDto { get; set; } = new UserDto();
 
 
         public async Task<IActionResult> OnGetAsync(string id)
@@ -46,10 +37,10 @@ namespace WebUI.Pages.Users
 
                 if (user != null)
                 {
-                    Id = user.Id;
-                    Name = user.Nombre;
-                    Email = user.Email;
-                    Estado = user.Estado;
+                    UserDto.Id = user.Id;
+                    UserDto.Name = user.Nombre;
+                    UserDto.Email = user.Email;
+                    UserDto.Estado = user.Estado;
                 }
             }
 
@@ -60,37 +51,52 @@ namespace WebUI.Pages.Users
         {
             var usuario = new Usuarios
             {
-                Nombre = Name,
-                Email = this.Email,
+                Nombre = UserDto.Name,
+                Email = this.UserDto.Email,
                 Estado = Request.Form["Estado"] == "on",
                 FechaCreacion = DateTime.Now,
-                HashPassword = _passwordService.HashPassword(Password),
-                RolId = this.Rol
+                HashPassword = _passwordService.HashPassword(UserDto.Password),
+                RolId = this.UserDto.Rol
             };
 
-            await _usuariosRepository.AddAsync(usuario);
-            return new JsonResult(new { success = true });
+            var result = await _usuariosRepository.AddAsync(usuario);
+
+            if (result)
+            {
+                return new JsonResult(new { success = true, message = "Usuario creado correctamente" });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Error al crear el usuario" });
+            }
         }
 
         public async Task<IActionResult> OnPutAsync()
         {
-            var user = await _usuariosRepository.GetByIdAsync(Id);
+            var user = await _usuariosRepository.GetByIdAsync(UserDto.Id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            var prueba = _passwordService.VerifyPassword(user.HashPassword, Password);
 
-            user.Nombre = Name;
-            user.Email = Email;
-            user.HashPassword = _passwordService.HashPassword(Password);
-            user.RolId = Rol;
+            user.Nombre = UserDto.Name;
+            user.Email = UserDto.Email;
+            user.HashPassword = _passwordService.HashPassword(UserDto.Password);
+            user.RolId = UserDto.Rol;
             user.Estado = Request.Form["Estado"] == "on";
             user.FechaModificacion = DateTime.Now;
-            await _usuariosRepository.UpdateAsync(user);
-            return new JsonResult(new { success = true });
+            var result =await _usuariosRepository.UpdateAsync(user);
+
+            if (result)
+            {
+                return new JsonResult(new { success = true, message = "Usuario modificado correctamente" });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Error al modificar el usuario" });
+            }
 
         }
 
@@ -103,9 +109,16 @@ namespace WebUI.Pages.Users
                 return NotFound();
             }
             user.Estado = false;
-            await _usuariosRepository.DeleteAsync(user);
+            var result = await _usuariosRepository.DeleteAsync(user);
 
-            return new JsonResult(new { success = true });
+            if (result)
+            {
+                return new JsonResult(new { success = true, message = "Usuario eliminado correctamente" });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Error al eliminar al usuario" });
+            }
         }
     }
 }

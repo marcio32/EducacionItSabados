@@ -8,17 +8,17 @@
 <form id="userForm" method="post">
     <div class="mb-3">
         <label for="Name" class="form-label">Nombre</label>
-        <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" />
+        <input type="text" id="Name" name="Name" class="form-control" value="@Model.UserDto.Name" />
     </div>
 
     <div class="mb-3">
         <label for="Email" class="form-label">Email</label>
-        <input type="text" id="Email" name="Email" class="form-control" value="@Model.Email" />
+        <input type="text" id="Email" name="Email" class="form-control" value="@Model.UserDto.Email" />
     </div>
 
     <div class="mb-3">
         <label for="Password" class="form-label">Password</label>
-        <input type="password" id="Password" name="Password" class="form-control" value="@Model.Password" />
+        <input type="password" id="Password" name="Password" class="form-control" value="@Model.UserDto.Password" />
     </div>
 
     <div class="mb-3">
@@ -33,8 +33,8 @@
 
     <div class="mb-3">
         <label for="Estado" class="form-label">Estado</label>
-        <input type="checkbox" id="Estado" name="Estado" class="form-check-input" @(Model.Estado ? "checked" : null)/>
+        <input type="checkbox" id="Estado" name="Estado" class="form-check-input" @(Model.UserDto.Estado ? "checked" : null) />
     </div>
-    <input type="hidden" name="Id" value="@Model.Id"/>
+    <input type="hidden" name="Id" value="@Model.UserDto.Id" />
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </form>

@@ -10,6 +10,6 @@ namespace Domain.Entities
         [MaxLength(50, ErrorMessage = "El nombre no puede exceder los 50 caracteres")]
         public string Nombre { get; set; } = string.Empty;
 
-        public bool Estados { get; set; }
+        public bool Estado { get; set; }
     }
 }

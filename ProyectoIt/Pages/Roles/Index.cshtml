@@ -1,6 +1,55 @@
 ﻿@page
 @model WebUI.Pages.Roles.IndexModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
+    var token = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
+<h1>Roles</h1>
+<button class="btn btn-primary mb-3 addRolBtn">Agregar</button>
+<table id="rolTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
 
-<h1>ROLES</h1>
+    </thead>
+    <tbody>
+        @foreach (var rol in Model.Roles)
+        {
+            <tr>
+                <td>@rol.Id</td>
+                <td>@rol.Nombre</td>
+                <td>@(rol.Estado ? "Activo" : "Inactivo")</td>
+                <td>
+                    <button type="button" class="btn bnt-sm btn-primary editRolBtn" data-rol-id="@rol.Id">Editar</button>
+                    <button type="button" class="btn bnt-sm btn-danger deleteRolBtn" data-rol-id="@rol.Id">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="editRolModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="RolModalLabel">Editar Usuarios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="RolContent">
+                <!--Vamos a Injectar nuestra Partial-->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteRolUrl = '@Url.Page("/Roles/RolPartial", "Rol")';
+        var antiForgeryToken = '@token';
+    </script>
+    <script src="~/js/Roles/Roles.js"></script>
+}

@@ -8,7 +8,7 @@ namespace Infrastructure.Application
         Task<bool> DeleteAsync(Roles rol);
         Task<List<Roles>> GetAllAsync();
         Task<List<Roles>> GetRolesActiveAsync();
-        Task<Roles?> GetByIdASync(int id);
+        Task<Roles?> GetByIdAsync(int id);
         Task<bool> UpdateAsync(Roles rol);
     }
 }
