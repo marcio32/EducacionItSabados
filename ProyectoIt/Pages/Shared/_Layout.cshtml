@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - ProyectoIt</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ProyectoIt.styles.css" asp-append-version="true" />\
+    <link rel="stylesheet" href="~/ProyectoIt.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/dataTables/dist/css/datatables.min.css" />
    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -34,6 +34,14 @@
                         </li> 
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Roles/Index">Roles</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <form method="post" asp-page="/Login/Logout">
+                                <button type="submit" class="btn bnt-link nav-link">Cerrar Sesion</button>
+                            </form>
                         </li>
                     </ul>
                 </div>

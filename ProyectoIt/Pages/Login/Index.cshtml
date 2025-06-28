@@ -25,7 +25,34 @@
             <div class="col-md-4">
                 <div class="card p-4">
                     <h2 class="card-title text-center mb-4">Iniciar Sesion</h2>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="Email" class="form-label" value="@Model.Login.Email">Email</label>
+                            <input id="email" type="email" name="Email" class="form-control" required>
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Password" class="form-label" value="@Model.Login.Password">Password</label>
+                            <input id="password" type="password" name="Password" class="form-control" required>
+                            <span class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                        @if (!string.IsNullOrEmpty(""))
+                        {
+                            <div class="alert alert-danger mt-3" role="alert">
+                                <p></p>
+                            </div>
+                        }
+                        <div class="text-center mt-3">
+                            <a href="#" id="forgot-password">Olvidaste tu Clave?</a>
+                        </div>
+                    </form>
 
+                    <div class="text-center mt-3">
+                        <form method="post" asp-page-handler="GoogleLogin">
+                            <button type="submit" class="btn btn-danger w-100">Ingresar con Google</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,10 +66,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <form method="post" asp-page-handler="ForgotPassword">
+                        <div class="mb-3">
+                            <label for="forgot-email" class="form-label">Email</label>
+                            <input id="forgot-email" type="email" class="form-control" required/>
+                            <span class="text-danger"></span>
+                            <button type="submit" class="btn btn-primary w-100 mt-3">Enviar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function(){
+            $("#forgot-password").click(function(e){
+                e.preventDefault();
+                $('#forgotPasswordModal').modal('show');
+            });
+        });
+    </script>
 
 </body>
 </html>

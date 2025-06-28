@@ -12,6 +12,7 @@ namespace Infrastructure.Repositorys
 
         public async Task<IEnumerable<Usuarios>> GetAllAsync() => await _dbContext.Usuarios.Include(x=> x.Rol).ToListAsync();
         public async Task<Usuarios?> GetByIdAsync(int id) => await _dbContext.Usuarios.FindAsync(id);
+        public async Task<Usuarios?> GetByEmailAsync(string email) => await _dbContext.Usuarios.Include(x=> x.Rol).FirstOrDefaultAsync(x => x.Email == email);
         public async Task<bool> UpdateAsync(Usuarios usuario)
         {
             _dbContext.Update(usuario);

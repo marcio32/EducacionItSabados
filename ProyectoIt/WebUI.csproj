@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Ingreastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Login\Request\" />
+  </ItemGroup>
+
 </Project>

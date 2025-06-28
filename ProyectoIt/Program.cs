@@ -18,18 +18,13 @@ namespace ProyectoIt
                 options.HeaderName = "RequestVerificationToken";
             });
 
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-            }).AddCookie(IdentityConstants.ApplicationScheme, options =>
+            builder.Services.AddAuthentication("CookieAuthentication")
+            .AddCookie("CookieAuthentication", options =>
             {
                 options.LoginPath = "/Login";
                 options.AccessDeniedPath = "/Login";
                 options.LogoutPath = "/Login/Logout";
-            }).AddCookie(IdentityConstants.ExternalScheme);
+            });
 
             var app = builder.Build();
              
