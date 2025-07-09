@@ -1,4 +1,5 @@
-﻿using Infrastructure.Application;
+﻿using Application.Interfaces;
+using Infrastructure.Application;
 using Infrastructure.Persistence;
 using Infrastructure.Repositorys;
 using Infrastructure.Services;
@@ -16,6 +17,7 @@ namespace Infrastructure
             services.AddScoped<IUsuariosRepository, UsuariosRepository>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IRolesRepository, RolesRepository>();
+            services.AddScoped<IEmailService, EmailService>();
             return services;
         }
     }

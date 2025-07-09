@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,7 +10,7 @@ namespace WebUI.Pages.Login
         public async Task<IActionResult> OnPostAsync()
         {
             await  HttpContext.SignOutAsync();
-            return RedirectToPage("/Index");
+            return RedirectToPage("/Login/Index");
         }
     }
 }

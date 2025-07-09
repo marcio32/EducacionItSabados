@@ -37,10 +37,10 @@
                             <span class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-                        @if (!string.IsNullOrEmpty(""))
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                         {
                             <div class="alert alert-danger mt-3" role="alert">
-                                <p></p>
+                                <p>@Model.ErrorMessage</p>
                             </div>
                         }
                         <div class="text-center mt-3">
@@ -68,8 +68,8 @@
                 <div class="modal-body">
                     <form method="post" asp-page-handler="ForgotPassword">
                         <div class="mb-3">
-                            <label for="forgot-email" class="form-label">Email</label>
-                            <input id="forgot-email" type="email" class="form-control" required/>
+                            <label for="Email" class="form-label">Email</label>
+                            <input id="email" type="email" name="Email" class="form-control" required />
                             <span class="text-danger"></span>
                             <button type="submit" class="btn btn-primary w-100 mt-3">Enviar</button>
                         </div>
