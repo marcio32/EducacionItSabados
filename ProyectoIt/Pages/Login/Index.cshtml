@@ -37,10 +37,16 @@
                             <span class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                        @if (TempData["ErrorMessage"] != null && TempData["SuccessMessage"] == null)
                         {
                             <div class="alert alert-danger mt-3" role="alert">
-                                <p>@Model.ErrorMessage</p>
+                                <p>@TempData["ErrorMessage"]</p>
+                            </div>
+                        }
+                        @if (TempData["ErrorMessage"] == null && TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success mt-3" role="alert">
+                                <p>@TempData["SuccessMessage"]</p>
                             </div>
                         }
                         <div class="text-center mt-3">
@@ -66,14 +72,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" asp-page-handler="ForgotPassword">
-                        <div class="mb-3">
-                            <label for="Email" class="form-label">Email</label>
-                            <input id="email" type="email" name="Email" class="form-control" required />
-                            <span class="text-danger"></span>
+                    @if (Model.Code > 0)
+                    {
+                        <form method="post" asp-page-handler="RecoverAccount">
+                            <p>Si el mail ingresado es correo le llegara un codigo para cambiar su clave</p>
+                            <div class="mb-3">
+                                <label for="Codigo" class="form-label">Codigo</label>
+                                <input id="codigo" type="text" name="Codigo" class="form-control" required />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="Password" class="form-label">Password</label>
+                                <input id="password" type="password" name="Password" class="form-control" required />
+                                <span class="text-danger"></span>
+                            </div>
                             <button type="submit" class="btn btn-primary w-100 mt-3">Enviar</button>
-                        </div>
-                    </form>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="ForgotPassword">
+                            <p>Ingrese su mail para cambiar su clave</p>
+                            <div class="mb-3">
+                                <label for="Email" class="form-label">Email</label>
+                                <input id="email" type="email" name="Email" class="form-control" required />
+                                <span class="text-danger"></span>
+                                <button type="submit" class="btn btn-primary w-100 mt-3">Enviar</button>
+                            </div>
+                        </form>
+                    }
                 </div>
             </div>
         </div>
@@ -82,10 +109,15 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(function(){
-            $("#forgot-password").click(function(e){
-                e.preventDefault();
-                $('#forgotPasswordModal').modal('show');
-            });
+        $("#forgot-password").click(function(e){
+        e.preventDefault();
+        $('#forgotPasswordModal').modal('show');
+        });
+
+        @if (Model.Code > 0)
+        {
+            @: $('#forgotPasswordModal').modal('show');
+        }
         });
     </script>
 

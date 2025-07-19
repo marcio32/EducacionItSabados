@@ -1,0 +1,48 @@
+﻿@page
+@model WebUI.Pages.Turnos.IndexModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    var token = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<h1>Turnos</h1>
+<button class="btn btn-primary mb-3 addTurnoBtn">Agregar</button>
+<table id="turnoTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+
+       
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary editTurnoBtn" data-turno-id="">Editar</button>
+                    <button type="button" class="btn btn-sm btn-danger deleteTurnoBtn" data-turno-id="">Eliminar</button>
+                </td>
+            </tr>
+      
+    </tbody>
+</table>
+
+<div class="modal fade" id="editTurnoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="TurnoModalLabel">Editar Usuarios</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="TurnoContent">
+                <!--Vamos a Injectar nuestra Partial-->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteTurnoUrl = '@Url.Page("/Turnos/TurnoPartial", "Turno")';
+        var antiForgeryToken = '@token';
+    </script>
+    <script src="~/js/Turnos/Turnos.js"></script>
+}

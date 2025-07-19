@@ -1,14 +1,12 @@
 using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Repositorys;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Formats.Asn1;
 using System.Security.Claims;
 using WebUI.Pages.Login.DTOs;
 
@@ -29,17 +27,26 @@ namespace WebUI.Pages.Login
 
         [BindProperty]
         public LoginDto Login { get; set; } = new LoginDto();
-        public string ErrorMessage { get; set; } = string.Empty;
+        [BindProperty]
+        public string Codigo { get; set; } = string.Empty;
+        [BindProperty]
+        public string Password { get; set; } = string.Empty;
         [BindProperty]
         public ForgotPasswordRequest ForgotPasswordInput { get; set; }
+        [TempData]
+        public string Email { get; set; }
+        public int Code { get; set; }
+      
 
         public async Task<IActionResult> OnPostAsync()
         {
+            TempData["ErrorMessage"] = null;
+            TempData["SuccessMessage"] = null;
             var user = await _usuariosRepository.GetByEmailAsync(Login.Email);
 
             if (user == null)
             {
-                ErrorMessage = message;
+                TempData["ErrorMessage"] = message;
                 return Page();
             }
 
@@ -47,7 +54,7 @@ namespace WebUI.Pages.Login
 
             if (!verify)
             {
-                ErrorMessage = message;
+                TempData["ErrorMessage"] = message;
                 return Page();
             }
 
@@ -95,15 +102,52 @@ namespace WebUI.Pages.Login
 
         public async Task<IActionResult> OnPostForgotPasswordAsync()
         {
+            Email = ForgotPasswordInput.Email;
             var user = await _usuariosRepository.GetByEmailAsync(ForgotPasswordInput.Email);
             if (user == null || !user.Estado)
             {
-                return Page();
+                Code = 1;
+                return null;
             }
 
-            await _emailService.SendEmailAsync(user.Email, "Restablecer contraseña", "Su codigo es 1234");
+            var guid = Guid.NewGuid();
+            var numeros = new String(guid.ToString().Where(Char.IsDigit).ToArray());
+            var seed = int.Parse(numeros.Substring(0, 6));
+            var random = new Random(seed);
+            var code = random.Next(000000, 999999);
+            user.Codigo = code;
+            await _usuariosRepository.UpdateAsync(user);
 
-            ErrorMessage = "Se ha enviado un enlace a su mail para restablecer su contraseña.";
+            await _emailService.SendEmailAsync(user.Email, "Restablecer contraseña", $"Su codigo de restablecimiento es: {code}");
+            Code = code;
+            return null;
+        }
+
+
+        public async Task<IActionResult> OnPostRecoverAccountAsync()
+        {
+            TempData["ErrorMessage"] = null;
+            TempData["SuccessMessage"] = null;
+            var user = await _usuariosRepository.GetByEmailAsync(Email);
+            if (user == null || !user.Estado)
+            {
+                TempData["ErrorMessage"] = "Error al cambiar el codigo";
+                return RedirectToPage("/Login/Index");
+            }
+
+            if (user.Codigo.ToString() == Codigo)
+            {
+                user.HashPassword = _passwordService.HashPassword(Password);
+                user.Codigo = null;
+                await _usuariosRepository.UpdateAsync(user);
+                
+                TempData["SuccessMessage"] = "Contraseña cambiada con exito";
+                return RedirectToPage("/Login/Index");
+            }
+
+            TempData["ErrorMessage"] = "El codigo ingresado es incorrecto por favor intente nuevamente";
+
+
             return Page();
         }
     }

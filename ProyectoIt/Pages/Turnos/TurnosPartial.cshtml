@@ -1,0 +1,15 @@
+﻿@page
+@model WebUI.Pages.Turnos.TurnosPartialModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    Layout = null;
+}
+
+<form id="turnoForm" method="post">
+    <div class="mb-3">
+        <label for="Name" class="form-label">Nombre</label>
+        <input type="text" id="Name" name="Name" class="form-control" value="" />
+    </div>
+    <input type="hidden" name="Id" value="" />
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</form>

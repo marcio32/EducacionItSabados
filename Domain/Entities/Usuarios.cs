@@ -18,8 +18,9 @@ namespace Domain.Entities
         public string HashPassword { get; set; } = string.Empty;
 
         public int RolId { get; set; }
-        public Roles Rol { get; set; } 
+        public Roles? Rol { get; set; } 
         public bool Estado { get; set; }
+        public int? Codigo { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
     }

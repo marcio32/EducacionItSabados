@@ -8,13 +8,13 @@ using WebUI.Pages.Users.DTOs;
 
 namespace WebUI.Pages.Users
 {
-    public class UserPartialModel : PageModel
+    public class UsersPartialModel : PageModel
     {
         private readonly IUsuariosRepository _usuariosRepository;
         private readonly IRolesRepository _rolesRepository;
         private readonly IPasswordService _passwordService;
 
-        public UserPartialModel(IUsuariosRepository usuariosRepository, IRolesRepository rolesRepository, IPasswordService passwordService)
+        public UsersPartialModel(IUsuariosRepository usuariosRepository, IRolesRepository rolesRepository, IPasswordService passwordService)
         {
             _usuariosRepository = usuariosRepository;
             _rolesRepository = rolesRepository;

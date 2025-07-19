@@ -15,6 +15,7 @@ namespace Infrastructure
         
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
             services.AddScoped<IUsuariosRepository, UsuariosRepository>();
+            services.AddScoped<ITurnosRepository, TurnosRepository>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<IEmailService, EmailService>();
