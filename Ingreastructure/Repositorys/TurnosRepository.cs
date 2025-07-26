@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Application.Interfaces;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,8 @@ namespace Infrastructure.Repositorys
 
         public TurnosRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Turnos>> GetAllAsync() => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Pacientes).Include(x => x.Usuario).ToListAsync();
-        public async Task<Turnos?> GetByIdAsync(int id) => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Pacientes).Include(x => x.Usuario).FirstOrDefaultAsync(x => x.Id == id);
-        public async Task<Turnos?> GetByEmailAsync(string email) => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Pacientes).Include(x => x.Usuario).FirstOrDefaultAsync();
+        public async Task<IEnumerable<Turnos>> GetAllAsync() => await _dbContext.Turnos.Include(x => x.Medico).Include(x=> x.Paciente).Include(x=>x.Usuario).Include(x=> x.Estado).Include(x=> x.Documentos).ToListAsync();
+        public async Task<Turnos?> GetByIdAsync(int id) => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Paciente).Include(x => x.Usuario).Include(x => x.Documentos).FirstOrDefaultAsync(x => x.Id == id);
         public async Task<bool> UpdateAsync(Turnos turno)
         {
             _dbContext.Update(turno);

@@ -1,4 +1,4 @@
-﻿using Infrastructure.Repositorys;
+﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services

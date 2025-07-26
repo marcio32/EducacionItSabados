@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Infrastructure.Repositorys;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Pages.Users.Request;
 using Domain.Entities;
-using Infrastructure.Application;
 using WebUI.Pages.Users.DTOs;
 
 namespace WebUI.Pages.Users
@@ -21,7 +20,7 @@ namespace WebUI.Pages.Users
             _passwordService = passwordService;
         }
 
-        public List<Domain.Entities.Roles> Roles { get; set; } = new List<Domain.Entities.Roles>();
+        public IEnumerable<Domain.Entities.Roles> Roles { get; set; } = new List<Domain.Entities.Roles>();
 
         [BindProperty]
         public UserDto UserDto { get; set; } = new UserDto();

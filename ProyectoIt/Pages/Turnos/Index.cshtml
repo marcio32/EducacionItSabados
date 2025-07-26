@@ -9,19 +9,53 @@
 <table id="turnoTable" class="display" style="width:100%">
     <thead>
         <tr>
+            <th>Id</th>
+            <th>Fecha y Hora</th>
+            <th>Estado</th>
+            <th>Medico</th>
+            <th>Paciente</th>
+            <th>Usuario</th>
+            <th>Documentos</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-
-       
+        @foreach (var turno in Model.Turnos)
+        {
             <tr>
+                <td>@turno.Id</td>
+                <td>@turno.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@turno.Estado?.Nombre</td>
+                <td>@(turno.Medico?.Nombre + " " + turno.Medico?.Apellido)</td>
+                <td>@(turno.Paciente?.Nombre + " " + turno.Paciente?.Apellido)</td>
+                <td>@turno.Usuario?.Nombre</td>
+                <td>
+                    @if (turno.Documentos.Any())
+                    {
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                @turno.Documentos.Count() doc(s)
+                            </button>
+                            <ul class="dropdown-menu"> 
+                                @foreach (var doc in turno.Documentos)
+                                {
+                                    <li><a class="dropdown-item" href="@doc.Ruta" target="_blank">@doc.Nombre</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin Documentos</span>
+                    }
+                </td>
                 <td>
                     <button type="button" class="btn btn-sm btn-primary editTurnoBtn" data-turno-id="">Editar</button>
                     <button type="button" class="btn btn-sm btn-danger deleteTurnoBtn" data-turno-id="">Eliminar</button>
                 </td>
             </tr>
-      
+        }
+
     </tbody>
 </table>
 

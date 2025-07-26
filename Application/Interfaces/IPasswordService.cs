@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Repositorys
+﻿namespace Application.Interfaces
 {
     public interface IPasswordService
     {

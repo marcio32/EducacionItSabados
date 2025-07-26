@@ -1,4 +1,4 @@
-using Infrastructure.Repositorys;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;

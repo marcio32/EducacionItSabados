@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Especialidades
+    public class Documentos
     {
         public int Id { get; set; }
         public string Nombre { get; set; } = string.Empty;
-        public bool Estado { get; set; }
+        public string Ruta { get; set; } = string.Empty;
+        public int TurnoId { get; set; } 
+        public DateTime FechaSubida { get; set; }
     }
 }

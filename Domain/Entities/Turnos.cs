@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -6,14 +7,17 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public DateTime FechaHora { get; set; }
-        public EstadoTurno Estado { get; set; }
-        public DateTime FechaModificacion { get; set; }
-        public int Usuario_Id { get; set; }
-        public int  Medico_Id { get; set; }
-        public int Paciente_Id { get; set; }
+        public DateTime? FechaModificacion { get; set; }
+        public int UsuarioId { get; set; }
+        public int MedicoId { get; set; }
+        public int PacienteId { get; set; }
+        public int EstadoId { get; set; }
+        public int DocumentosId { get; set; }
+        public Estados? Estado { get; set; }
         public Medicos? Medico { get; set; } 
         public Usuarios? Usuario { get; set; } 
-        public Pacientes? Pacientes { get; set; } 
-
+        public Pacientes? Paciente { get; set; }
+        //public Documentos? Documentos { get; set; } 
+        public ICollection<Documentos> Documentos { get; set; } = new List<Documentos>();
     }
 }
