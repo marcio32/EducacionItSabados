@@ -8,7 +8,7 @@
 
 $('.addTurnoBtn').click(function () {
     $.ajax({
-        url: '/Turnos/TurnoPartial',
+        url: '/Turnos/TurnosPartial',
         type: 'GET',
         success: function (data) {
             $('#TurnoContent').html(data);
@@ -20,7 +20,7 @@ $('.addTurnoBtn').click(function () {
                 debugger
                 var formData = new FormData(this);
                 $.ajax({
-                    url: 'Turnos/TurnoPartial',
+                    url: 'Turnos/TurnosPartial',
                     type: 'POST',
                     headers: {
                         "RequestVerificationToken": antiForgeryToken
@@ -72,7 +72,7 @@ $('.editTurnoBtn').click(function () {
 
                 var formData = new FormData(this);
                 $.ajax({
-                    url: 'Turnos/TurnoPartial',
+                    url: 'Turnos/TurnosPartial',
                     type: 'PUT',
                     headers: {
                         "RequestVerificationToken": antiForgeryToken

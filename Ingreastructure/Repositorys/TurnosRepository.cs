@@ -25,10 +25,11 @@ namespace Infrastructure.Repositorys
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> AddAsync(Turnos turno)
+        public async Task<Turnos> AddAsync(Turnos turno)
         {
             _dbContext.Add(turno);
-            return await _dbContext.SaveChangesAsync() > 0;
+            await _dbContext.SaveChangesAsync();
+            return turno;
         }
     }
 }

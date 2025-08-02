@@ -15,5 +15,6 @@ namespace Infrastructure.Persistence
         public DbSet<Documentos> Documentos { get; set; }
         public DbSet<Especialidades> Especialidades { get; set; }
         public DbSet<Estados> Estados { get; set; }
+        public DbSet<Estudios> Estudios { get; set; }
     }
 }

@@ -6,5 +6,7 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<Pacientes>> GetAllAsync();
         Task<Pacientes?> GetByIdAsync(int id);
+        Task<Pacientes?> GetByDniAsync(int dni);
+        Task<Pacientes> AddAsync(Pacientes pacientes);
     }
 }

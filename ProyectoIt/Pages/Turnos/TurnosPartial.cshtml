@@ -6,10 +6,86 @@
 }
 
 <form id="turnoForm" method="post">
-    <div class="mb-3">
-        <label for="Name" class="form-label">Nombre</label>
-        <input type="text" id="Name" name="Name" class="form-control" value="" />
+    <div class="col mb-3">
+        <label for="Dni" class="form-label">Dni</label>
+        <input type="number" id="Dni" name="Dni" class="form-control" />
     </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label for="Nombre" class="form-label">Nombre</label>
+            <input type="text" id="Nombre" name="Nombre" class="form-control" />
+        </div>
+        <div class="col mb-3">
+            <label for="Apellido" class="form-label">Apellido</label>
+            <input type="text" id="Apellido" name="Apellido" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label for="FechaNacimiento" class="form-label">Fecha de nacimiento</label>
+            <input type="date" id="FechaNacimiento" name="FechaNacimiento" class="form-control" />
+        </div>
+
+        <div class="col mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" id="Email" name="Email" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label for="Telefono" class="form-label">Telefono</label>
+            <input type="number" id="Telefono" name="Telefono" class="form-control" />
+        </div>
+
+        <div class="col mb-3">
+            <label for="EstadoId" class="form-label">Estado</label>
+            <select id="EstadoId" name="EstadoId" class="form-select">
+                <option value="">Seleccione un estado</option>
+                @foreach (var estado in Enum.GetValues<Domain.Enums.EstadoTurno>())
+                {
+                    <option value="@((int)estado)">@estado</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label for="MedicoId" class="form-label">Medico</label>
+            <select id="MedicoId" name="MedicoId" class="form-select">
+                <option value="">Seleccione un medico</option>
+                @foreach (var medico in Model.Medicos)
+                {
+                    <option value="@(medico.Id)">@medico.Nombre @medico.Apellido</option>
+                }
+            </select>
+        </div>
+
+        <div class="col mb-3">
+            <label for="EstudioId" class="form-label">Estudio</label>
+            <select id="EstudioId" name="EstudioId" class="form-select">
+                <option value="">Seleccione un medico</option>
+                @foreach (var estudio in Model.Estudios)
+                {
+                    <option value="@(estudio.Id)">@estudio.Nombre</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="col mb-3">
+        <label for="Observaciones" class="form-label">Observaciones</label>
+        <input type="text" id="Observaciones" name="Observaciones" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Documentos" class="form-label">Documento</label>
+        <input type="file" id="Documentos" name="Documentos" class="form-control" accept=".pdf,.doc,.docx,.jpg,.png" multiple />
+    </div>
+
+
     <input type="hidden" name="Id" value="" />
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </form>

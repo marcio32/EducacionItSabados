@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Repositorys;
 using Infrastructure.Interfaces;
 using Infrastructure.Persistence;
 using Infrastructure.Repositorys;
@@ -21,6 +22,7 @@ namespace Infrastructure
             services.AddScoped<IMedicosRepository, MedicosRepository>();
             services.AddScoped<IPacientesRepository, PacientesRepository>();
             services.AddScoped<IDocumentosRepository, DocumentosRepository>();
+            services.AddScoped<IEstudiosRepository, EstudiosRepository>();
             return services;
         }
     }
