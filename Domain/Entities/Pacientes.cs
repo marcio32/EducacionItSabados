@@ -11,9 +11,9 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
-        public decimal Dni { get; set; }
+        public int Dni { get; set; }
         public DateOnly FechaNacimiento { get; set; }
         public string? Email { get; set; }
-        public decimal? Telefono { get; set; }
+        public int? Telefono { get; set; }
     }
 }

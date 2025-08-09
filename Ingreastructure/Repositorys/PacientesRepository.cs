@@ -20,6 +20,12 @@ namespace Infrastructure.Repositorys
             await _dbContext.SaveChangesAsync();
             return pacientes;
         }
+        
+        public async Task<bool> UpdateAsync(Pacientes pacientes) 
+        {
+            _dbContext.Pacientes.Update(pacientes);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
 
     }
 }

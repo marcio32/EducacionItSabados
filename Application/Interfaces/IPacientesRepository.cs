@@ -8,5 +8,6 @@ namespace Application.Interfaces
         Task<Pacientes?> GetByIdAsync(int id);
         Task<Pacientes?> GetByDniAsync(int dni);
         Task<Pacientes> AddAsync(Pacientes pacientes);
+        Task<bool> UpdateAsync(Pacientes pacientes);
     }
 }

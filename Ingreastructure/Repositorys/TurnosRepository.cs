@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Domain.Enums;
 
 namespace Infrastructure.Repositorys
 {
@@ -11,8 +12,8 @@ namespace Infrastructure.Repositorys
 
         public TurnosRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Turnos>> GetAllAsync() => await _dbContext.Turnos.Include(x => x.Medico).Include(x=> x.Paciente).Include(x=>x.Usuario).Include(x=> x.Estado).Include(x=> x.Documentos).ToListAsync();
-        public async Task<Turnos?> GetByIdAsync(int id) => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Paciente).Include(x => x.Usuario).Include(x => x.Documentos).FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<IEnumerable<Turnos>> GetAllAsync() => await _dbContext.Turnos.Include(x => x.Medico).Include(x=> x.Paciente).Include(x=>x.Usuario).Include(x=> x.Estado).Include(x=> x.Documentos).Include(x => x.Estudio).ToListAsync();
+        public async Task<Turnos?> GetByIdAsync(int id) => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Paciente).Include(x => x.Usuario).Include(x => x.Documentos).Include(x=> x.Estudio).FirstOrDefaultAsync(x => x.Id == id);
         public async Task<bool> UpdateAsync(Turnos turno)
         {
             _dbContext.Update(turno);
@@ -21,6 +22,7 @@ namespace Infrastructure.Repositorys
 
         public async Task<bool> DeleteAsync(Turnos turno)
         {
+            turno.EstadoId = (int)EstadoTurno.Cancelado;
             _dbContext.Update(turno);
             return await _dbContext.SaveChangesAsync() > 0;
         }

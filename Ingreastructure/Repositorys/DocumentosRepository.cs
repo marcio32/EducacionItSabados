@@ -13,7 +13,7 @@ namespace Infrastructure.Repositorys
         public async Task<IEnumerable<Documentos?>> GetByTurnoIdAsync(int turnoId) => await _dbContext.Documentos.Where(x => x.TurnosId == turnoId).ToListAsync();
         public async Task<Documentos?> GetByIdAsync(int id) => await _dbContext.Documentos.FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task<Documentos> CreateAsync(Documentos documento)
+        public async Task<Documentos> AddAsync(Documentos documento)
         {
             _dbContext.Documentos.Add(documento);
             await _dbContext.SaveChangesAsync();

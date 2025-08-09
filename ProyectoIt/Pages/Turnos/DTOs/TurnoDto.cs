@@ -10,8 +10,8 @@ namespace WebUI.Pages.Turnos.DTOs
         public string Apellido { get; set; } = string.Empty;
         public DateOnly FechaNacimiento { get; set; }
         public string Email { get; set; } = string.Empty;
-        public int Telefono { get; set; }
-        public DateTime FechaHora { get; set; }
+        public int? Telefono { get; set; }
+        public DateTime FechaHora { get; set; } = DateTime.Now.AddSeconds(-DateTime.Now.Second).AddMilliseconds(-DateTime.Now.Millisecond);
         public EstadoTurno Estado { get; set; }
         public int UsuarioId { get; set; }
         public int MedicoId { get; set; }

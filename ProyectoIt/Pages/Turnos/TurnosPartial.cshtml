@@ -8,40 +8,40 @@
 <form id="turnoForm" method="post">
     <div class="col mb-3">
         <label for="Dni" class="form-label">Dni</label>
-        <input type="number" id="Dni" name="Dni" class="form-control" />
+        <input type="number" id="Dni" name="Dni" class="form-control" asp-for="TurnoDto.Dni" />
     </div>
     <div class="row">
         <div class="col mb-3">
             <label for="Nombre" class="form-label">Nombre</label>
-            <input type="text" id="Nombre" name="Nombre" class="form-control" />
+            <input type="text" id="Nombre" name="Nombre" class="form-control" asp-for="TurnoDto.Nombre" />
         </div>
         <div class="col mb-3">
             <label for="Apellido" class="form-label">Apellido</label>
-            <input type="text" id="Apellido" name="Apellido" class="form-control" />
+            <input type="text" id="Apellido" name="Apellido" class="form-control" asp-for="TurnoDto.Apellido" />
         </div>
     </div>
 
     <div class="row">
         <div class="col mb-3">
             <label for="FechaNacimiento" class="form-label">Fecha de nacimiento</label>
-            <input type="date" id="FechaNacimiento" name="FechaNacimiento" class="form-control" />
+            <input type="date" id="FechaNacimiento" name="FechaNacimiento" class="form-control" asp-for="TurnoDto.FechaNacimiento" />
         </div>
 
         <div class="col mb-3">
             <label for="Email" class="form-label">Email</label>
-            <input type="email" id="Email" name="Email" class="form-control" />
+            <input type="email" id="Email" name="Email" class="form-control" asp-for="TurnoDto.Email"/>
         </div>
     </div>
 
     <div class="row">
         <div class="col mb-3">
             <label for="Telefono" class="form-label">Telefono</label>
-            <input type="number" id="Telefono" name="Telefono" class="form-control" />
+            <input type="number" id="Telefono" name="Telefono" class="form-control" asp-for="TurnoDto.Telefono" />
         </div>
 
         <div class="col mb-3">
             <label for="EstadoId" class="form-label">Estado</label>
-            <select id="EstadoId" name="EstadoId" class="form-select">
+            <select id="EstadoId" name="EstadoId" class="form-select" asp-for="TurnoDto.EstadoId">
                 <option value="">Seleccione un estado</option>
                 @foreach (var estado in Enum.GetValues<Domain.Enums.EstadoTurno>())
                 {
@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col mb-3">
             <label for="MedicoId" class="form-label">Medico</label>
-            <select id="MedicoId" name="MedicoId" class="form-select">
+            <select id="MedicoId" name="MedicoId" class="form-select" asp-for="TurnoDto.MedicoId">
                 <option value="">Seleccione un medico</option>
                 @foreach (var medico in Model.Medicos)
                 {
@@ -65,7 +65,7 @@
 
         <div class="col mb-3">
             <label for="EstudioId" class="form-label">Estudio</label>
-            <select id="EstudioId" name="EstudioId" class="form-select">
+            <select id="EstudioId" name="EstudioId" class="form-select" asp-for="TurnoDto.EstudioId">
                 <option value="">Seleccione un medico</option>
                 @foreach (var estudio in Model.Estudios)
                 {
@@ -74,10 +74,17 @@
             </select>
         </div>
     </div>
+    
+    <div class="row">
+        <div class="col mb-3">
+            <label for="FechaHora" class="form-label">Fecha Turno</label>
+            <input type="datetime-local" id="FechaHora" name="FechaHora" class="form-control" asp-for="TurnoDto.FechaHora" />
+        </div>
+    </div>
 
     <div class="col mb-3">
         <label for="Observaciones" class="form-label">Observaciones</label>
-        <input type="text" id="Observaciones" name="Observaciones" class="form-control" />
+        <input type="text" id="Observaciones" name="Observaciones" class="form-control" asp-for="TurnoDto.Observaciones" />
     </div>
 
     <div class="mb-3">
@@ -86,6 +93,6 @@
     </div>
 
 
-    <input type="hidden" name="Id" value="" />
+    <input type="hidden" name="Id" asp-for="TurnoDto.Id" />
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </form>

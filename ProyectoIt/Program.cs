@@ -3,6 +3,7 @@ using Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
+using WebUI.Middlewares;
 
 namespace ProyectoIt
 {
@@ -52,6 +53,7 @@ namespace ProyectoIt
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseRouting();
 

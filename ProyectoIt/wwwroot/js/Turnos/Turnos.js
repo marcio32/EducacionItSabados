@@ -59,7 +59,7 @@ $('.addTurnoBtn').click(function () {
 $('.editTurnoBtn').click(function () {
     var turnoId = $(this).data("turno-id");
     $.ajax({
-        url: '/Turnos/TurnoPartial?id=' + turnoId,
+        url: '/Turnos/TurnosPartial?id=' + turnoId,
         type: 'GET',
         success: function (data) {
 
@@ -110,7 +110,7 @@ $('.editTurnoBtn').click(function () {
 $('.deleteTurnoBtn').click(function () {
     Swal.fire({
         title: "Estas Seguro?",
-        text: "Vas a eliminar al usuario",
+        text: "Vas a cancelar el turno",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -120,6 +120,7 @@ $('.deleteTurnoBtn').click(function () {
     }).then((result) => {
         debugger
         if (result.isConfirmed) {
+            debugger
             var turnoId = $(this).data("turno-id");
             $.ajax({
                 url: deleteTurnoUrl,
@@ -145,7 +146,7 @@ $('.deleteTurnoBtn').click(function () {
                     modal.hide();
                     Swal.fire({
                         title: "Error!",
-                        text: "No se pudo eliminar el usuario.",
+                        text: "No se pudo cancelar el turno.",
                         icon: "error"
                     });
                 }

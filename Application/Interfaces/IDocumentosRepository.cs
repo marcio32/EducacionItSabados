@@ -6,6 +6,6 @@ namespace Infrastructure.Interfaces
     {
         Task<Documentos?> GetByIdAsync(int id);
         Task<IEnumerable<Documentos?>> GetByTurnoIdAsync(int turnoId);
-        Task<Documentos> CreateAsync(Documentos documento);
+        Task<Documentos> AddAsync(Documentos documento);
     }
 }

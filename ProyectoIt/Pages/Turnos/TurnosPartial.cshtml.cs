@@ -6,6 +6,7 @@ using WebUI.Pages.Turnos.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Enums;
 using Application.Repositorys;
+using WebUI.Pages.Turnos.Request;
 
 namespace WebUI.Pages.Turnos
 {
@@ -40,11 +41,19 @@ namespace WebUI.Pages.Turnos
                     TurnoDto = new TurnoDto
                     {
                         Id = turno.Id,
+                        Dni = turno.Paciente.Dni,
+                        Nombre = turno.Paciente.Nombre,
+                        Apellido = turno.Paciente.Apellido,
+                        FechaNacimiento = turno.Paciente.FechaNacimiento,
+                        Email = turno.Paciente.Email,
+                        Telefono = turno.Paciente.Telefono,
                         FechaHora = turno.FechaHora,
-                        Estado = Enum.Parse<EstadoTurno>(turno.Estado.Nombre),
+                        EstadoId = turno.EstadoId,
+                        EstudioId = turno.EstudioId,
                         MedicoId = turno.MedicoId,
                         PacienteId = turno.PacienteId,
-                        UsuarioId = turno.UsuarioId
+                        UsuarioId = turno.UsuarioId,
+                        Observaciones = turno.Observaciones
                     };
                     Documentos = turno.Documentos.ToList();
                 }
@@ -89,7 +98,8 @@ namespace WebUI.Pages.Turnos
 
                 if (TurnoDto.Documentos != null && TurnoDto.Documentos.Any())
                 {
-                    var uploadPath = @"c:\temp\";
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "adjuntos");
+                    Directory.CreateDirectory(uploadPath);
 
                     foreach (var archivo in TurnoDto.Documentos)
                     {
@@ -104,11 +114,11 @@ namespace WebUI.Pages.Turnos
                         var documento = new Documentos
                         {
                             Nombre = fileName,
-                            Ruta = @"c:\temp\" + fileName,
+                            Ruta = $"adjuntos/{fileName}",
                             TurnosId = turno.Id,
                             FechaSubida = DateTime.Now
                         };
-                        await _documentosRepository.CreateAsync(documento);
+                        await _documentosRepository.AddAsync(documento);
                     }
                 }
                 return new JsonResult(new { success = true, message = "Turno Creado" });
@@ -118,6 +128,91 @@ namespace WebUI.Pages.Turnos
                 Console.WriteLine(ex.Message);
                 return null;
             }
+        }
+
+
+        public async Task<IActionResult> OnPutAsync()
+        {
+            try
+            {
+                var turno = await _turnosRepository.GetByIdAsync(TurnoDto.Id);
+                if (turno == null) return NotFound();
+
+                var paciente = await _pacientesRepository.GetByDniAsync(TurnoDto.Dni);
+
+                paciente = new Pacientes
+                {
+                    Nombre = TurnoDto.Nombre,
+                    Apellido = TurnoDto.Apellido,
+                    Dni = TurnoDto.Dni,
+                    FechaNacimiento = TurnoDto.FechaNacimiento,
+                    Telefono = TurnoDto.Telefono,
+                    Email = TurnoDto.Email
+                };
+
+                var result = await _pacientesRepository.UpdateAsync(paciente);
+
+                if (!result)
+                    return new JsonResult(new { sucess = true, message = "Error al actualizar el turno" });
+
+                turno.FechaModificacion = DateTime.Now;
+                turno.FechaHora = TurnoDto.FechaHora;
+                turno.EstadoId = TurnoDto.EstadoId;
+                turno.MedicoId = TurnoDto.MedicoId;
+                turno.EstudioId = TurnoDto.EstudioId;
+                turno.FechaHora = TurnoDto.FechaHora;
+                turno.Observaciones = TurnoDto.Observaciones;
+
+                result = await _turnosRepository.UpdateAsync(turno);
+
+                if (TurnoDto.Documentos != null && TurnoDto.Documentos.Any())
+                {
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "adjuntos");
+                    Directory.CreateDirectory(uploadPath);
+
+                    foreach (var archivo in TurnoDto.Documentos)
+                    {
+                        var fileName = $"{turno.Id}_{archivo.FileName}";
+                        var filePath = Path.Combine(uploadPath, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+
+                        var documento = new Documentos
+                        {
+                            Nombre = fileName,
+                            Ruta = $"adjuntos/{fileName}",
+                            TurnosId = turno.Id,
+                            FechaSubida = DateTime.Now
+                        };
+                        await _documentosRepository.AddAsync(documento);
+                    }
+                }
+
+                if (result)
+                    return new JsonResult(new { success = true, message = "Turno actualizado correctamente" });
+                else
+                    return new JsonResult(new { success = false, message = "Error al actualizar el turno" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<IActionResult> OnDeleteAsync([FromBody] CancelTurnoRequest cancelTurnoRequest)
+        {
+            var turno = await _turnosRepository.GetByIdAsync(cancelTurnoRequest.Id);
+
+            var result = await _turnosRepository.DeleteAsync(turno);
+
+            if(result) 
+                return new JsonResult(new { success = true, message = "Turno Cancelado correctamente" });
+            else
+                return new JsonResult(new { success = false, message = "Error al cancelar el turno" });
         }
 
         private async Task LoadDataASync()
