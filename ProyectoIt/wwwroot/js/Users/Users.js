@@ -8,7 +8,7 @@
 
 $('.addUserBtn').click(function () {
     $.ajax({
-        url: '/Users/UserPartial',
+        url: '/Users/UsersPartial',
         type: 'GET',
         success: function (data) {
             $('#UserContent').html(data);
@@ -20,7 +20,7 @@ $('.addUserBtn').click(function () {
                 debugger
                 var formData = new FormData(this);
                 $.ajax({
-                    url: 'Users/UserPartial',
+                    url: 'Users/UsersPartial',
                     type: 'POST',
                     headers: {
                         "RequestVerificationToken": antiForgeryToken
@@ -59,7 +59,7 @@ $('.addUserBtn').click(function () {
 $('.editUserBtn').click(function () {
     var userId = $(this).data("user-id");
     $.ajax({
-        url: '/Users/UserPartial?id=' + userId,
+        url: '/Users/UsersPartial?id=' + userId,
         type: 'GET',
         success: function (data) {
 
@@ -72,7 +72,7 @@ $('.editUserBtn').click(function () {
 
                 var formData = new FormData(this);
                 $.ajax({
-                    url: 'Users/UserPartial',
+                    url: 'Users/UsersPartial',
                     type: 'PUT',
                     headers: {
                         "RequestVerificationToken": antiForgeryToken
