@@ -10,7 +10,7 @@
             <div class="card bg-primary text-white">
                 <div class="card-body">
                     <h5>Turnos Pendientes</h5>
-                    <h2 id="turnosPendientes">1</h2>
+                    <h2 id="turnosPendientes">@Model.TurnosPendientes</h2>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
             <div class="card bg-success text-white">
                 <div class="card-body">
                     <h5>Turnos Confirmados</h5>
-                    <h2 id="turnosConfirmados">1</h2>
+                    <h2 id="turnosConfirmados">@Model.TurnosConfirmados</h2>
                 </div>
             </div>
         </div>
@@ -26,15 +26,15 @@
             <div class="card bg-warning text-white">
                 <div class="card-body">
                     <h5>Turnos Hoy</h5>
-                    <h2 id="turnosHoy">1</h2>
+                    <h2 id="turnosHoy">@Model.TurnosHoy</h2>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card bg-info text-white">
                 <div class="card-body">
-                    <h5>Turnos Online</h5>
-                    <h2 id="turnosOnline">0</h2>
+                    <h5>Turnos Reprogramados</h5>
+                    <h2 id="turnosReprogramados">@Model.TurnosReprogramados</h2>
                 </div>
             </div>
         </div>
@@ -48,8 +48,13 @@
                 </div>
                 <div class="card-body">
                     <div id="turnosDelDia">
-                        @{
-                            //TODO: Completar
+                        @foreach (var turno in Model.TurnosDelDia)
+                        {
+                            <div class="alert alert-info">
+                                <strong>@turno.Paciente?.Nombre @turno.Paciente?.Apellido</strong> -
+                                Dr. @turno.Medico?.Nombre @turno.Medico?.Apellido -
+                                @turno.FechaHora.ToString("HH:mm")
+                            </div>
                         }
                     </div>
                 </div>
@@ -68,3 +73,63 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="./lib/signalr/signalr.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+
+            const connection = new signalR.HubConnectionBuilder().withUrl('/notificationHub').build();
+            connection.start().then(function(){
+                console.log('SignalR Connected');
+            });
+
+            connection.on('TurnoCreated', function(data){
+                addNotification(data.message, 'success');
+                 updateDashboard();
+            })
+            connection.on('TurnoUpdated', function(data){
+                addNotification(data.message, 'info');
+                 updateDashboard();
+            })
+            connection.on('TurnoCanceled', function(data){
+                addNotification(data.message, 'warning');
+                 updateDashboard();
+            })
+        });
+
+        function addNotification(message, type){
+            const notificaciones = document.getElementById('notificaciones');
+            if(notificaciones){
+                const notification = document.createElement('div');
+                notification.className = 'alert alert-' + type + ' alert-dismissible fade show';
+                notification.innerHTML = message + '<small class="d-block">' + new Date().toLocaleTimeString() + '</small>'
+                notificaciones.prepend(notification);
+            }
+        }
+
+        function updateDashboard(){
+            debugger
+            fetch('/?handler=Stats', {
+                headers:{
+                'Accept': 'application/json'}
+            }).then(response => response.json())
+            .then(data => {
+                document.getElementById('turnosPendientes').textContent = data.turnosPendientes;
+                document.getElementById('turnosConfirmados').textContent = data.turnosConfirmados;
+                document.getElementById('turnosHoy').textContent = data.turnosHoy;
+                document.getElementById('turnosReprogramados').textContent = data.turnosReprogramados;
+                debugger
+                const container = document.getElementById('turnosDelDia');
+                container.innerHTML = '';
+                data.turnosDelDia.forEach(turno => {
+                    const div = document.createElement('div');
+                    div.className = 'alert alert-info';
+                    div.innerHTML = `<strong>${turno.paciente.nombre} ${turno.paciente.apellido}</strong> - Dr. ${turno.medico.nombre} ${turno.medico.apellido} - ${new Date(turno.fechaHora).toLocaleTimeString('es-AR', {hour: '2-digit', minute: '2-digit', hour12:false})}`;
+                    container.appendChild(div);
+                });
+
+            });
+        }
+    </script>
+}

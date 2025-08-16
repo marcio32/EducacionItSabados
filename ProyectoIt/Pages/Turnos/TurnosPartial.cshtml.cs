@@ -10,7 +10,7 @@ using WebUI.Pages.Turnos.Request;
 
 namespace WebUI.Pages.Turnos
 {
-    public class TurnosPartialModel(ITurnosRepository turnosRepository, IMedicosRepository medicosRepository, IPacientesRepository pacientesRepository, IUsuariosRepository usuariosRepository, IDocumentosRepository documentosRepository, IEstudiosRepository estudiosRepository) : PageModel
+    public class TurnosPartialModel(ITurnosRepository turnosRepository, IMedicosRepository medicosRepository, IPacientesRepository pacientesRepository, IUsuariosRepository usuariosRepository, IDocumentosRepository documentosRepository, IEstudiosRepository estudiosRepository, INotificationService notificationService) : PageModel
     {
 
         private readonly ITurnosRepository _turnosRepository = turnosRepository;
@@ -19,6 +19,7 @@ namespace WebUI.Pages.Turnos
         private readonly IUsuariosRepository _usuariosRepository = usuariosRepository;
         private readonly IDocumentosRepository _documentosRepository = documentosRepository;
         private readonly IEstudiosRepository _estudiosRepository = estudiosRepository;
+        private readonly INotificationService _notificationService = notificationService;
 
         public List<Medicos> Medicos { get; set; } = new List<Medicos>();
         public List<Pacientes> Pacientes { get; set; } = new List<Pacientes>();
@@ -121,6 +122,8 @@ namespace WebUI.Pages.Turnos
                         await _documentosRepository.AddAsync(documento);
                     }
                 }
+                var medico = await _medicosRepository.GetByIdAsync(turno.MedicoId);
+                await _notificationService.NotifyTurnoCreated(turno.Id, turno.Paciente?.Nombre + " " + turno.Paciente?.Apellido, medico?.Nombre + " " + medico?.Apellido); 
                 return new JsonResult(new { success = true, message = "Turno Creado" });
             }
             catch (Exception ex)
@@ -190,7 +193,8 @@ namespace WebUI.Pages.Turnos
                         await _documentosRepository.AddAsync(documento);
                     }
                 }
-
+                var estado = (EstadoTurno)TurnoDto.EstadoId;
+                await _notificationService.NotifyTurnoUpdated(turno.Id, estado.ToString());
                 if (result)
                     return new JsonResult(new { success = true, message = "Turno actualizado correctamente" });
                 else
@@ -208,8 +212,9 @@ namespace WebUI.Pages.Turnos
             var turno = await _turnosRepository.GetByIdAsync(cancelTurnoRequest.Id);
 
             var result = await _turnosRepository.DeleteAsync(turno);
+            await _notificationService.NotifyTurnoCanceled(turno.Id, turno.Observaciones);
 
-            if(result) 
+            if (result) 
                 return new JsonResult(new { success = true, message = "Turno Cancelado correctamente" });
             else
                 return new JsonResult(new { success = false, message = "Error al cancelar el turno" });

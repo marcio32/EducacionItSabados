@@ -1,4 +1,5 @@
 using Infrastructure;
+using Infrastructure.Hubs;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -40,7 +41,7 @@ namespace ProyectoIt
             });
 
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-
+            builder.Services.AddSignalR();
             var app = builder.Build();
              
             // Configure the HTTP request pipeline.
@@ -61,7 +62,7 @@ namespace ProyectoIt
             app.UseAuthorization();
 
             app.MapRazorPages();
-
+            app.MapHub<NotificationHub>("/notificationHub");
             app.Run();
         }
     }

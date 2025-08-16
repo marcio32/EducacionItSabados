@@ -1,0 +1,46 @@
+﻿@page
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Chat en Tiempo Real</h5>
+                </div>
+                <div class="card-body">
+                    <div id="messagesList" style="height: 400px; overflow-y: auto; border 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+                        @{
+                            //TODO: Mostrar Mensajes
+                        }
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="userInput" class="form-control" placeholder="Tu nombre.." />
+                        <input type="text" id="messageInput" class="form-control" placeholder="Escribe un mensaje..." />
+                        <button class="btn btn-primary" type="button" id="sendButton">enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="./lib/signalr/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder().withUrl('/notificationHub').build();
+           connection.start().then(function(){
+               console.log('SignalR Connected');
+           });
+
+           document.getElementById('sendButton').addEventListener('click', function(event){
+               var user = document.getElementById('userInput').value;
+               var message = document.getElementById('messageInput').value;
+               connection.invoke("SendMessage", user, message).catch(function(err){
+                     return console.error(err.toString());
+               });
+           });
+    </script>
+}

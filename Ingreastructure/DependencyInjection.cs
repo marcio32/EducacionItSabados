@@ -23,6 +23,7 @@ namespace Infrastructure
             services.AddScoped<IPacientesRepository, PacientesRepository>();
             services.AddScoped<IDocumentosRepository, DocumentosRepository>();
             services.AddScoped<IEstudiosRepository, EstudiosRepository>();
+            services.AddScoped<INotificationService, NotificationService>();
             return services;
         }
     }
