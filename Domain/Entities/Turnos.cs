@@ -14,7 +14,6 @@ namespace Domain.Entities
         public int EstadoId { get; set; }
         public int DocumentosId { get; set; }
         public int EstudioId { get; set; }
-        public int EstudioId2 { get; set; }
         public string? Observaciones { get; set; }
         public Estados? Estado { get; set; }
         public Medicos? Medico { get; set; } 

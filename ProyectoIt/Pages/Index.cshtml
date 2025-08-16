@@ -1,9 +1,70 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard en tiempo real";
 }
 
-<div class="text-center">
-    <h1 class="display-4">DASHBOARD</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5>Turnos Pendientes</h5>
+                    <h2 id="turnosPendientes">1</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Turnos Confirmados</h5>
+                    <h2 id="turnosConfirmados">1</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5>Turnos Hoy</h5>
+                    <h2 id="turnosHoy">1</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Turnos Online</h5>
+                    <h2 id="turnosOnline">0</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Turnos del Dia</h5>
+                </div>
+                <div class="card-body">
+                    <div id="turnosDelDia">
+                        @{
+                            //TODO: Completar
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Notificaciones</h5>
+                </div>
+                <div class="card-body">
+                    <div id="notificaciones" style="height:300px; overflow: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
