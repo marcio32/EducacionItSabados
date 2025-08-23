@@ -41,6 +41,23 @@
                connection.invoke("SendMessage", user, message).catch(function(err){
                      return console.error(err.toString());
                });
+               document.getElementById("messageInput").value = "";
+               event.preventDefault();
+           });
+
+           connection.on("ReceiveMessage", function(user, message){
+               var li =document.createElement("div");
+               li.className = "mb-2 p-2 bg-light rounded";
+               li.innerHTML = `<strong>${user}:</strong> ${message} <small class="text-muted">${new Date().toLocaleTimeString()}</small>`;
+               document.getElementById("messagesList").appendChild(li);
+               document.getElementById("messagesList").scrollTop = document.getElementById("messagesList").scrollHeight;
+           });
+
+           document.getElementById("messageInput").addEventListener("keypress", function(event){
+               debugger
+               if(event.key === "Enter"){
+                   document.getElementById("sendButton").click();
+               }
            });
     </script>
 }

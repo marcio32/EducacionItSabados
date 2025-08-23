@@ -18,13 +18,13 @@ namespace WebUI.Pages.Roles
         [BindProperty]
         public RolDto RolDto { get; set; } = new RolDto();
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(string id = "")
         {
-            var rol = await _rolesRepository.GetByIdAsync(int.Parse(id));
+            var rol = await _rolesRepository.GetByIdAsync(int.TryParse(id, out int result) ? result : 0);
 
             if(rol == null)
             {
-                return NotFound();
+                return Page();
             }
 
             RolDto.Id = rol.Id;
