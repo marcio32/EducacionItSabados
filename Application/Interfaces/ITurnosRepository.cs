@@ -8,6 +8,6 @@ namespace Application.Interfaces
         Task<bool> DeleteAsync(Turnos turno);
         Task<IEnumerable<Turnos>> GetAllAsync();
         Task<Turnos?> GetByIdAsync(int id);
-        Task<bool> UpdateAsync(Turnos turno);
+        Task<Turnos> UpdateAsync(Turnos turno);
     }
 }

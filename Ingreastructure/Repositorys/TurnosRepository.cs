@@ -12,12 +12,13 @@ namespace Infrastructure.Repositorys
 
         public TurnosRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Turnos>> GetAllAsync() => await _dbContext.Turnos.Include(x => x.Medico).Include(x=> x.Paciente).Include(x=>x.Usuario).Include(x=> x.Estado).Include(x=> x.Documentos).Include(x => x.Estudio).ToListAsync();
-        public async Task<Turnos?> GetByIdAsync(int id) => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Paciente).Include(x => x.Usuario).Include(x => x.Documentos).Include(x=> x.Estudio).FirstOrDefaultAsync(x => x.Id == id);
-        public async Task<bool> UpdateAsync(Turnos turno)
+        public async Task<IEnumerable<Turnos>> GetAllAsync() => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Paciente).Include(x => x.Usuario).Include(x => x.Estado).Include(x => x.Documentos).Include(x => x.Estudio).ToListAsync();
+        public async Task<Turnos?> GetByIdAsync(int id) => await _dbContext.Turnos.Include(x => x.Medico).Include(x => x.Paciente).Include(x => x.Usuario).Include(x => x.Documentos).Include(x => x.Estudio).FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Turnos> UpdateAsync(Turnos turno)
         {
             _dbContext.Update(turno);
-            return await _dbContext.SaveChangesAsync() > 0;
+            await _dbContext.SaveChangesAsync();
+            return turno;
         }
 
         public async Task<bool> DeleteAsync(Turnos turno)

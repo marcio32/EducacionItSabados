@@ -73,6 +73,7 @@ namespace WebUI.Pages.Turnos
                 {
                     paciente = new Pacientes
                     {
+                        Id = TurnoDto.Id,
                         Nombre = TurnoDto.Nombre,
                         Apellido = TurnoDto.Apellido,
                         Dni = TurnoDto.Dni,
@@ -92,10 +93,11 @@ namespace WebUI.Pages.Turnos
                     MedicoId = TurnoDto.MedicoId,
                     PacienteId = paciente.Id,
                     EstudioId = TurnoDto.EstudioId,
+                    Observaciones = TurnoDto.Observaciones,
                     DocumentosId = 0
                 };
 
-                turno = await _turnosRepository.AddAsync(turno);
+                turno = await _turnosRepository.UpdateAsync(turno);
 
                 if (TurnoDto.Documentos != null && TurnoDto.Documentos.Any())
                 {
@@ -123,7 +125,7 @@ namespace WebUI.Pages.Turnos
                     }
                 }
                 var medico = await _medicosRepository.GetByIdAsync(turno.MedicoId);
-                await _notificationService.NotifyTurnoCreated(turno.Id, turno.Paciente?.Nombre + " " + turno.Paciente?.Apellido, medico?.Nombre + " " + medico?.Apellido); 
+                await _notificationService.NotifyTurnoCreated(turno.Id, turno.Paciente?.Nombre + " " + turno.Paciente?.Apellido, medico?.Nombre + " " + medico?.Apellido);
                 return new JsonResult(new { success = true, message = "Turno Creado" });
             }
             catch (Exception ex)
@@ -142,16 +144,14 @@ namespace WebUI.Pages.Turnos
                 if (turno == null) return NotFound();
 
                 var paciente = await _pacientesRepository.GetByDniAsync(TurnoDto.Dni);
+                paciente.Id = paciente.Id;
+                paciente.Nombre = TurnoDto.Nombre;
+                paciente.Apellido = TurnoDto.Apellido;
+                paciente.Dni = TurnoDto.Dni;
+                paciente.FechaNacimiento = TurnoDto.FechaNacimiento;
+                paciente.Telefono = TurnoDto.Telefono;
+                paciente.Email = TurnoDto.Email;
 
-                paciente = new Pacientes
-                {
-                    Nombre = TurnoDto.Nombre,
-                    Apellido = TurnoDto.Apellido,
-                    Dni = TurnoDto.Dni,
-                    FechaNacimiento = TurnoDto.FechaNacimiento,
-                    Telefono = TurnoDto.Telefono,
-                    Email = TurnoDto.Email
-                };
 
                 var result = await _pacientesRepository.UpdateAsync(paciente);
 
@@ -166,7 +166,7 @@ namespace WebUI.Pages.Turnos
                 turno.FechaHora = TurnoDto.FechaHora;
                 turno.Observaciones = TurnoDto.Observaciones;
 
-                result = await _turnosRepository.UpdateAsync(turno);
+                var resultTurno = await _turnosRepository.UpdateAsync(turno);
 
                 if (TurnoDto.Documentos != null && TurnoDto.Documentos.Any())
                 {
@@ -195,7 +195,7 @@ namespace WebUI.Pages.Turnos
                 }
                 var estado = (EstadoTurno)TurnoDto.EstadoId;
                 await _notificationService.NotifyTurnoUpdated(turno.Id, estado.ToString());
-                if (result)
+                if (resultTurno != null)
                     return new JsonResult(new { success = true, message = "Turno actualizado correctamente" });
                 else
                     return new JsonResult(new { success = false, message = "Error al actualizar el turno" });
@@ -214,7 +214,7 @@ namespace WebUI.Pages.Turnos
             var result = await _turnosRepository.DeleteAsync(turno);
             await _notificationService.NotifyTurnoCanceled(turno.Id, turno.Observaciones);
 
-            if (result) 
+            if (result)
                 return new JsonResult(new { success = true, message = "Turno Cancelado correctamente" });
             else
                 return new JsonResult(new { success = false, message = "Error al cancelar el turno" });

@@ -46,13 +46,8 @@
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5>Acciones</h5>
-                    <button class="btn btn-primary" onclick="ExportToPDF()">Exportar PDF</button>
-                </div>
                 <div class="card-body">
                     <button class="btn btn-success me-2" onclick="RefreshCharts()">Actualizar Datos</button>
-                    <button class="btn btn-info me-2" onclick="DownloadExcel()">Descargar Excel</button>
                 </div>
             </div>
         </div>
@@ -72,105 +67,77 @@
 
         async function loadCharts(){
 
-            const response = await fetch('@Url.Page(null, null, new { handler = "Reportes" })',
+            var response = await fetch('@Url.Page(null, null, new { handler = "Reportes" })',
                 {
                     method:'GET'
                 }
              );
-             const data = await response.json()
-
+             var data = await response.json()
              const ctxEstados = document.getElementById('estadosChart').getContext('2d');
+             var labels = ['Pendientes', 'Confirmados', 'Cancelados', 'Realizados'];
+             var valores = [data.pendientes,data.confirmados,data.cancelados, data.realizados, data.hoy];
+             var colores = ['#ffc107', '#28a745', '#dc3545','#17a2b8'];
+             debugger
+             estadosChart = Charts(ctxEstados, labels, valores, 'doughnut', colores);
 
-             estadosChart  = new Chart(ctxEstados, {
-                 type: 'doughnut',
-                 data:{
-                     labels: ['Pendientes', 'Confirmados', 'Cancelados', 'Realizados'],
-                     datasets: [{
-                         data: [data.pendientes, data.confirmados, data.cancelados, data.realizados],
-                         backgroundColor: ['#ffc107', '#28a745', '#dc3545','#17a2b8']
-                     }]
-                 },
-                 options: {
-                     response: true,
-                     plugins:{
-                         legend: {
-                             position: 'bottom'
-                         }
-                     }
-                 }
-             })
+             response = await fetch('@Url.Page(null, null, new { handler = "ReportesMedicos" })',
+                {
+                    method:'GET'
+                }
+             );
+
+             data = await response.json();
+             labels = data.map(x=> x.medicoNombre);
+             valores = data.map(x=> x.total);
 
              const ctxMedicos = document.getElementById('medicosChart').getContext('2d');
-             medicosChart  = new Chart(ctxMedicos, {
-                 type: 'bar',
-                 data:{
-                     labels: ['Dr. Perez', 'Dra. Fernandez', 'Dr. Garcia'],
-                     datasets: [{
-                        label: 'Turnos',
-                        data: [12, 8 ,15],
-                        backgroundColor:'#007bff'
-                     }]
-                 },
-                 options: {
-                     response: true,
-                    scales: {
-                        y:{
-                          beginAtZero: true
-                        }
-                    }
-                 }
-             })
+
+
+             medicosChart = Charts(ctxMedicos, labels, valores, 'bar');
+
+             response = await fetch('@Url.Page(null, null, new { handler = "ReportesMensual" })',
+                {
+                    method:'GET'
+                }
+             );
+
+             data = await response.json();
+             labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+             valores = data.map(x=> x.total);
 
              const ctxMensual = document.getElementById('mensualChart').getContext('2d');
-             mensualChart  = new Chart(ctxMensual, {
-                 type: 'line',
-                 data:{
-                     labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-                     datasets: [{
-                        label: 'Turnos por mes',
-                        data: [2, 8, 4, 26, 90 ,15],
-                        boderColor: '#28a745',
-                        backgroundColor:'rgba(40,167,69, 1)',
-                        tension: 0.4
-                     }]
-                 },
-                 options: {
-                     response: true,
-                    scales: {
-                        y:{
-                          beginAtZero: true
-                        }
-                    }
-                 }
-             })
 
+             mensualChart = Charts(ctxMensual, labels, valores, 'line');
         }
 
-             function RefreshCharts(){
+        function RefreshCharts(){
                  estadosChart.destroy();
                  medicosChart.destroy();
                  mensualChart.destroy();
                  loadCharts();
              }
 
-             function ExportToPDF(){
-                 const { jsPDF} = window.jspdf;
-                 const doc = new jsPDF();
+        function Charts(ctx, label, datas, types, colors = '#dc3545'){
+            var result = new Chart(ctx, {
+                 type: types,
+                 data:{
+                     labels: label,
+                     datasets: [{
+                         data: datas,
+                         backgroundColor: colors
+                     }]
+                 },
+                 options: {
+                     response: true,
+                     plugins:{
+                         legend: {
+                             position: types === 'doughnut' ? 'bottom' : ''
+                         }
+                     }
+                 }
+             })
 
-                 doc.setFontSize(20);
-                 doc.text('Reporte de turnos', 20, 40);
-
-                 doc.setFontSize(12);
-                 doc.text('Fecha: ' + new Date().toLocaleDateString(), 20, 40);
-                 doc.text('Este reporte contiene estadisticas de turnos medicos,', 20, 50);
-
-                 doc.save('reporte-turnos.pdf')
-
-             }
-
-             function DownloadExcel(){
-                 alert('Descargar Excel;');
-             }
-
+             return result;
+        }
     </script>
 }
